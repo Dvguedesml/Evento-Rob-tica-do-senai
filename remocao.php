@@ -21,6 +21,7 @@ $evento = $_SESSION['eventos'][$id];
 <head>
     <meta charset="UTF-8">
     <title>Remover Evento</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Confirmar Remoção</h1>

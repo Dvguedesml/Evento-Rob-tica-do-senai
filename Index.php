@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Eventos SENAI</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Eventos do SENAI</h1>
