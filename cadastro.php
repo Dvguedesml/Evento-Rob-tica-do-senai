@@ -44,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Cadastrar Evento</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Cadastrar Evento</h1>

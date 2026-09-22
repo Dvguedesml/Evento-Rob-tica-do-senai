@@ -15,6 +15,7 @@ $evento = $_SESSION['eventos'][$id];
 <head>
     <meta charset="UTF-8">
     <title>Detalhes do Evento</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1><?php echo $evento['titulo']; ?></h1>
