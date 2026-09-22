@@ -27,13 +27,13 @@ div {
 }
 
 a {
-    color: #555;
+    color: blue;
     text-decoration: none;
     font-weight: bold;
 }
 
 a:hover {
-    color: #222;
+    color: blue;
 }
 
 button {
