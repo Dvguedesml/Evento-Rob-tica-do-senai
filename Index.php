@@ -25,6 +25,7 @@
                 <a href="detalhes.php?id=<?php echo $id; ?>">Ver Detalhes</a> |
                 <a href="edicao.php?id=<?php echo $id; ?>">Editar</a> |
                 <a href="remocao.php?id=<?php echo $id; ?>">Excluir</a>
+                <a href="limite-vagas.php?id=<?php echo $id; ?>">limites de vagas</a>
             </div>
             <hr>
         <?php } ?>
