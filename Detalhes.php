@@ -27,6 +27,8 @@ $evento = $_SESSION['eventos'][$id];
         <p><strong>Local:</strong> <?php echo $evento['local']; ?></p>
         <p><strong>Responsável:</strong> <?php echo $evento['responsavel']; ?></p>
 
+        
+
         <a href="index.php">Voltar para a lista</a>
     </div>
 </body>

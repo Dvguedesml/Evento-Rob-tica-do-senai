@@ -25,6 +25,13 @@
                 <a href="detalhes.php?id=<?php echo $id; ?>">Ver Detalhes</a> |
                 <a href="edicao.php?id=<?php echo $id; ?>">Editar</a> |
                 <a href="remocao.php?id=<?php echo $id; ?>">Excluir</a>
+                
+
+                <?php if (($evento['status'] ?? 'ativo') == 'ativo') { ?>
+                    <a href="status_evento.php?id=<?php echo $id; ?>">Status</a>
+                <?php } ?>
+
+                
             </div>
             <hr>
         <?php } ?>
