@@ -13,7 +13,9 @@
         'inicio' => '09:00',
         'fim' => '10:00',
         'local' => 'Laboratório 1',
-        'responsavel' => 'Prof. Carlos'
+        'responsavel' => 'Prof. Carlos',
+        'status' => 'ativo'
+
     ],
         2 => [
         'id' => 2,
@@ -24,7 +26,8 @@
         'inicio' => '10:30',
         'fim' => '11:30',
         'local' => 'Laboratório 2',
-        'responsavel' => 'Profa. Ana'
+        'responsavel' => 'Profa. Ana',
+        'status' => 'ativo'
     ]
     ];
  $_SESSION['proximo_id'] = 3;
