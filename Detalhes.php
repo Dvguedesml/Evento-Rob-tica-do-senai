@@ -9,6 +9,7 @@ if (!$id || !isset($_SESSION['eventos'][$id])) {
 }
 
 $evento = $_SESSION['eventos'][$id];
+$status = $evento['status'] ?? 'ativo';
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -20,14 +21,13 @@ $evento = $_SESSION['eventos'][$id];
 <body>
     <h1><?php echo $evento['titulo']; ?></h1>
     <div>
+        <p><strong>Status:</strong> <?php echo $status; ?></p>
         <p><strong>Descrição:</strong> <?php echo $evento['descricao']; ?></p>
         <p><strong>Área:</strong> <?php echo $evento['area']; ?></p>
         <p><strong>Data:</strong> <?php echo $evento['data']; ?></p>
         <p><strong>Horário:</strong> <?php echo $evento['inicio']; ?> às <?php echo $evento['fim']; ?></p>
         <p><strong>Local:</strong> <?php echo $evento['local']; ?></p>
         <p><strong>Responsável:</strong> <?php echo $evento['responsavel']; ?></p>
-
-        
 
         <a href="index.php">Voltar para a lista</a>
     </div>

@@ -1,4 +1,6 @@
-<?php require_once 'init.php'; ?>
+<?php 
+require_once 'init.php'; 
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -12,26 +14,25 @@
     <hr>
 
     <?php if (empty($_SESSION['eventos'])) { ?>
-        <p>Nenhum evento cadastrado.</p>
+        <p>Nenhum evento encontrado.</p>
     <?php } else { ?>
-        <?php foreach ($_SESSION['eventos'] as $id => $evento) { ?>
+        <?php foreach ($_SESSION['eventos'] as $id => $evento) { 
+            $status = $evento['status'] ?? 'ativo';
+        ?>
             <div>
-                <h2><?php echo $evento['titulo']; ?></h2>
+                <h2>
+                    <?php echo $evento['titulo']; ?>
+                    <?php if ($status === 'cancelado') { echo " <span style='color:red;'>(CANCELADO)</span>"; } ?>
+                </h2>
                 <p><?php echo $evento['descricao']; ?></p>
-                <p>Data: <?php echo $evento['data']; ?></p>
-                <p>Horário: <?php echo $evento['inicio']; ?> às <?php echo $evento['fim']; ?></p>
+                <p>Data: <?php echo $evento['data']; ?> | Horário: <?php echo $evento['inicio']; ?> às <?php echo $evento['fim']; ?></p>
                 <p>Local: <?php echo $evento['local']; ?></p>
+                <p><strong>Status:</strong> <?php echo $status; ?></p>
                 
                 <a href="detalhes.php?id=<?php echo $id; ?>">Ver Detalhes</a> |
                 <a href="edicao.php?id=<?php echo $id; ?>">Editar</a> |
+                <a href="status_evento.php?id=<?php echo $id; ?>">Status</a> |
                 <a href="remocao.php?id=<?php echo $id; ?>">Excluir</a>
-                
-
-                <?php if (($evento['status'] ?? 'ativo') == 'ativo') { ?>
-                    <a href="status_evento.php?id=<?php echo $id; ?>">Status</a>
-                <?php } ?>
-
-                
             </div>
             <hr>
         <?php } ?>
