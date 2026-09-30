@@ -10,6 +10,7 @@ if (!$id || !isset($_SESSION['eventos'][$id])) {
 
 $evento = $_SESSION['eventos'][$id];
 $status = $evento['status'] ?? 'ativo';
+$inscritos = $evento['inscritos'] ?? [];
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -29,6 +30,26 @@ $status = $evento['status'] ?? 'ativo';
         <p><strong>Local:</strong> <?php echo $evento['local']; ?></p>
         <p><strong>Responsável:</strong> <?php echo $evento['responsavel']; ?></p>
 
+        <!-- Botão de Inscrição só se estiver ativo -->
+        <?php if ($status === 'ativo') { ?>
+            <a href="inscricao.php?id=<?php echo $id; ?>">Realizar Inscrição</a><br><br>
+        <?php } ?>
+
+        <hr>
+
+        <!-- Lista de Inscritos -->
+        <h3>Inscritos no Evento (<?php echo count($inscritos); ?>)</h3>
+        <?php if (empty($inscritos)) { ?>
+            <p>Nenhum participante inscrito até o momento.</p>
+        <?php } else { ?>
+            <ul>
+                <?php foreach ($inscritos as $participante) { ?>
+                    <li><?php echo $participante['nome']; ?> (<?php echo $participante['email']; ?>)</li>
+                <?php } ?>
+            </ul>
+        <?php } ?>
+
+        <br>
         <a href="index.php">Voltar para a lista</a>
     </div>
 </body>
