@@ -1,32 +1,29 @@
 <?php
 require_once 'init.php';
 
-$id = $_GET['id'] ?? null;
+$id = $_REQUEST['id'] ?? null;
 
 if (!$id || !isset($_SESSION['eventos'][$id])) {
-    echo "Evento não encontrado.";
+    echo "Evento não encontrado. <a href='index.php'>Voltar</a>";
     exit;
 }
+
 if (!isset($_SESSION['eventos'][$id]['status'])) {
     $_SESSION['eventos'][$id]['status'] = 'ativo';
 }
 
 $evento = $_SESSION['eventos'][$id];
-if (isset($_POST['cancelar'])) {
-    $_SESSION['eventos'][$id]['status'] = 'cancelado';
 
-    header("Location: index.php");
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['cancelar'])) {
+        $_SESSION['eventos'][$id]['status'] = 'cancelado';
+    } elseif (isset($_POST['reativar'])) {
+        $_SESSION['eventos'][$id]['status'] = 'ativo';
+    }
+    header('Location: index.php');
     exit;
 }
-if (isset($_POST['reativar'])) {
-    $_SESSION['eventos'][$id]['status'] = 'ativo';
-
-    header("Location: index.php");
-    exit;
-}
-
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -35,33 +32,24 @@ if (isset($_POST['reativar'])) {
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <h1>Alterar Status do Evento</h1>
+    <div>
+        <h2><?php echo $evento['titulo']; ?></h2>
 
-<h1>Status do Evento</h1>
-<h2><?php echo $evento['titulo']; ?></h2>
+        <p>Status atual: <strong><?php echo $evento['status']; ?></strong></p>
 
-<p>
-    Status:
-    <?php echo $evento['status']; ?>
-</p>
-<?php if ($evento['status'] == 'ativo') { ?>
+        <?php if ($evento['status'] === 'ativo') { ?>
+            <form method="POST">
+                <button type="submit" name="cancelar">Cancelar evento</button>
+            </form>
+        <?php } else { ?>
+            <form method="POST">
+                <button type="submit" name="reativar">Reativar evento</button>
+            </form>
+        <?php } ?>
 
-    <form method="POST">
-        <button type="submit" name="cancelar">
-            Cancelar evento
-        </button>
-    </form>
-<?php } else { ?>
-
-    <form method="POST">
-        <button type="submit" name="reativar">
-            Reativar evento
-        </button>
-    </form>
-
-<?php } ?>
-
-<br>
-
-<a href="index.php">Voltar</a>
+        <br>
+        <a href="index.php">Voltar</a>
+    </div>
 </body>
 </html>
