@@ -85,6 +85,7 @@ if (!empty($_SESSION['eventos'])) {
                 <a href="edicao.php?id=<?php echo $id; ?>">Editar</a> |
                 <a href="status_evento.php?id=<?php echo $id; ?>">Status</a> |
                 <a href="remocao.php?id=<?php echo $id; ?>">Excluir</a>
+                <a href="busca-e-filtros.php?id=<?php echo $id; ?>">Filtros</a>
             </div>
             <hr>
         <?php } ?>
