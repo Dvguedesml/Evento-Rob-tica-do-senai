@@ -10,7 +10,9 @@ if (!$id || !isset($_SESSION['eventos'][$id])) {
 
 $evento = $_SESSION['eventos'][$id];
 $status = $evento['status'] ?? 'ativo';
+$capacidade = $evento['capacidade'] ?? 0;
 $inscritos = $evento['inscritos'] ?? [];
+$vagas_disponiveis = $capacidade - count($inscritos);
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -29,10 +31,13 @@ $inscritos = $evento['inscritos'] ?? [];
         <p><strong>Horário:</strong> <?php echo $evento['inicio']; ?> às <?php echo $evento['fim']; ?></p>
         <p><strong>Local:</strong> <?php echo $evento['local']; ?></p>
         <p><strong>Responsável:</strong> <?php echo $evento['responsavel']; ?></p>
+        <p><strong>Vagas Disponíveis:</strong> <?php echo $vagas_disponiveis; ?> de <?php echo $capacidade; ?></p>
 
-        <!-- Botão de Inscrição só se estiver ativo -->
-        <?php if ($status === 'ativo') { ?>
+        <!-- Botão de Inscrição apenas se estiver ativo E com vagas disponíveis -->
+        <?php if ($status === 'ativo' && $vagas_disponiveis > 0) { ?>
             <a href="inscricao.php?id=<?php echo $id; ?>">Realizar Inscrição</a><br><br>
+        <?php } elseif ($status === 'ativo' && $vagas_disponiveis <= 0) { ?>
+            <p style="color: red;"><strong>Inscrições Encerradas (Evento Lotado)</strong></p>
         <?php } ?>
 
         <hr>
