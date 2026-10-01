@@ -1,47 +1,38 @@
 <?php
 require_once 'init.php';
 
-$id = $_REQUEST['id'] ?? null;
+$id = $_GET['id'] ?? null;
 
 if (!$id || !isset($_SESSION['eventos'][$id])) {
-    echo "Evento não encontrado! <a href='index.php'>Voltar</a>";
+    echo "Evento não encontrado. <a href='index.php'>Voltar</a>";
     exit;
 }
 
+$evento = $_SESSION['eventos'][$id];
+$total_inscritos = count($evento['inscritos'] ?? []);
 $erro = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $titulo = $_POST['titulo'];
-    $descricao = $_POST['descricao'];
-    $area = $_POST['area'];
-    $data = $_POST['data'];
-    $inicio = $_POST['inicio'];
-    $fim = $_POST['fim'];
-    $local = $_POST['local'];
-    $responsavel = $_POST['responsavel'];
+    $capacidade = (int)($_POST['capacidade'] ?? 0);
 
-    if (!$titulo || !$descricao || !$area || !$data || !$inicio || !$fim || !$local || !$responsavel) {
-        $erro = 'Todos os campos são obrigatórios!';
-    } elseif ($fim <= $inicio) {
-        $erro = 'O horário final deve ser maior que o inicial!';
+    if ($capacidade <= 0) {
+        $erro = "A capacidade deve ser um número inteiro positivo!";
+    } elseif ($capacidade < $total_inscritos) {
+        $erro = "A capacidade não pode ser menor que o número de inscritos atuais ($total_inscritos)!";
     } else {
-        $_SESSION['eventos'][$id] = [
-            'id' => (int)$id,
-            'titulo' => $titulo,
-            'descricao' => $descricao,
-            'area' => $area,
-            'data' => $data,
-            'inicio' => $inicio,
-            'fim' => $fim,
-            'local' => $local,
-            'responsavel' => $responsavel
-        ];
+        $_SESSION['eventos'][$id]['titulo'] = trim($_POST['titulo'] ?? '');
+        $_SESSION['eventos'][$id]['descricao'] = trim($_POST['descricao'] ?? '');
+        $_SESSION['eventos'][$id]['area'] = trim($_POST['area'] ?? '');
+        $_SESSION['eventos'][$id]['data'] = trim($_POST['data'] ?? '');
+        $_SESSION['eventos'][$id]['inicio'] = trim($_POST['inicio'] ?? '');
+        $_SESSION['eventos'][$id]['fim'] = trim($_POST['fim'] ?? '');
+        $_SESSION['eventos'][$id]['local'] = trim($_POST['local'] ?? '');
+        $_SESSION['eventos'][$id]['responsavel'] = trim($_POST['responsavel'] ?? '');
+        $_SESSION['eventos'][$id]['capacidade'] = $capacidade;
 
-        header('Location: index.php');
+        header("Location: index.php");
         exit;
     }
-} else {
-    $evento = $_SESSION['eventos'][$id];
 }
 ?>
 <!DOCTYPE html>
@@ -53,24 +44,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <h1>Editar Evento</h1>
-    <?php if ($erro) echo "<p style='color:red;'>$erro</p>"; ?>
 
+    <?php if (!empty($erro)) { ?>
+        <p style="color: red;"><?php echo $erro; ?></p>
+    <?php } ?>
 
-    <div>
-        <form method="POST">
-            <input type="hidden" name="id" value="<?php echo $id; ?>">
-            <label>Título: <input type="text" name="titulo" value="<?php echo $evento['titulo']; ?>" required></label><br><br>
-            <label>Descrição: <textarea name="descricao" required><?php echo $evento['descricao']; ?></textarea></label><br><br>
-            <label>Área: <input type="text" name="area" value="<?php echo $evento['area']; ?>" required></label><br><br>
-            <label>Data: <input type="date" name="data" value="<?php echo $evento['data']; ?>" required></label><br><br>
-            <label>Início: <input type="time" name="inicio" value="<?php echo $evento['inicio']; ?>" required></label><br><br>
-            <label>Fim: <input type="time" name="fim" value="<?php echo $evento['fim']; ?>" required></label><br><br>
-            <label>Local: <input type="text" name="local" value="<?php echo $evento['local']; ?>" required></label><br><br>
-            <label>Responsável: <input type="text" name="responsavel" value="<?php echo $evento['responsavel']; ?>" required></label><br><br>
-            
-            <button type="submit">Atualizar Evento</button>
-            <a href="index.php">Cancelar</a>
+    <form method="POST">
+        <label>Título:</label><br>
+        <input type="text" name="titulo" value="<?php echo $evento['titulo']; ?>"><br><br>
+
+        <label>Descrição:</label><br>
+        <textarea name="descricao"><?php echo $evento['descricao']; ?></textarea><br><br>
+
+        <label>Área:</label><br>
+        <input type="text" name="area" value="<?php echo $evento['area']; ?>"><br><br>
+
+        <label>Data:</label><br>
+        <input type="date" name="data" value="<?php echo $evento['data']; ?>"><br><br>
+
+        <label>Início:</label><br>
+        <input type="time" name="inicio" value="<?php echo $evento['inicio']; ?>"><br><br>
+
+        <label>Fim:</label><br>
+        <input type="time" name="fim" value="<?php echo $evento['fim']; ?>"><br><br>
+
+        <label>Local:</label><br>
+        <input type="text" name="local" value="<?php echo $evento['local']; ?>"><br><br>
+
+        <label>Responsável:</label><br>
+        <input type="text" name="responsavel" value="<?php echo $evento['responsavel']; ?>"><br><br>
+
+        <label>Capacidade (Vagas):</label><br>
+        <input type="number" name="capacidade" min="1" value="<?php echo $evento['capacidade'] ?? 0; ?>"><br>
+        <small>Mínimo permitido agora: <?php echo $total_inscritos; ?> (inscritos atuais)</small><br><br>
+
+        <button type="submit">Salvar Alterações</button>
     </form>
-    </div>
+
+    <br>
+    <a href="index.php">Voltar</a>
 </body>
 </html>
