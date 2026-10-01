@@ -9,11 +9,19 @@ if (!$id || !isset($_SESSION['eventos'][$id])) {
 }
 
 $evento = $_SESSION['eventos'][$id];
+$capacidade = $evento['capacidade'] ?? 0;
+$inscritos = $evento['inscritos'] ?? [];
+$vagas_disponiveis = $capacidade - count($inscritos);
 $erro = '';
 
-// Impede inscrição se o evento estiver cancelado
+// Bloqueios de segurança no PHP
 if (($evento['status'] ?? 'ativo') === 'cancelado') {
     echo "Este evento está cancelado e não recebe inscrições. <a href='detalhes.php?id=$id'>Voltar</a>";
+    exit;
+}
+
+if ($vagas_disponiveis <= 0) {
+    echo "Este evento já está lotado! <a href='detalhes.php?id=$id'>Voltar</a>";
     exit;
 }
 
@@ -24,8 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($nome) || empty($email)) {
         $erro = "Preencha todos os campos!";
     } else {
-        // Verificar se o e-mail já está inscrito neste evento
-        $inscritos = $_SESSION['eventos'][$id]['inscritos'] ?? [];
         $ja_inscrito = false;
 
         foreach ($inscritos as $p) {
@@ -38,7 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($ja_inscrito) {
             $erro = "Este e-mail já está inscrito neste evento!";
         } else {
-            // Salva a nova inscrição na sessão
             $_SESSION['eventos'][$id]['inscritos'][] = [
                 'nome' => $nome,
                 'email' => $email
